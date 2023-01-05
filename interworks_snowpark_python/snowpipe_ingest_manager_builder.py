@@ -99,6 +99,49 @@ def build_snowpipe_ingest_manager_via_parameters_object(
 
   return snowpipe_ingest_manager
 
+## Define function to build a snowpipe ingest manager
+## leveraging environment variables
+## containing Snowflake connection parameters,
+## with the private key stored in 
+## an Azure secrets vault.
+## Only works if corresponding Azure packages are installed
+def build_snowpipe_ingest_manager_using_stored_private_key_in_azure_secrets_vault(
+    target_pipe_name : str = None
+  ):
+
+  ### Import required modules
+  from .azure_secrets_vault_functions import retrieve_private_key_from_azure_secrets
+  from .leverage_snowflake_connection_parameters_dictionary import retrieve_snowflake_connection_parameters
+  import os
+
+  ### Retrieve snowflake user from environment variables
+  snowflake_user = os.getenv("SNOWFLAKE_USER")
+
+  ### Retrieve private key for user from Azure Secrets Vault
+  private_key = retrieve_private_key_from_azure_secrets(snowflake_user)
+
+  ### Define empty variable that will be populated with JSON
+  snowflake_connection_parameters = {}
+
+  ### Define imported connection parameters using environment variables
+  ### whilst targeting specific account
+  imported_connection_parameters = {
+      "account" : os.getenv("SNOWFLAKE_ACCOUNT")
+    , "user" : snowflake_user
+    , "default_role" : os.getenv("SNOWFLAKE_DEFAULT_ROLE")
+    , "default_warehouse" : os.getenv("SNOWFLAKE_DEFAULT_WAREHOUSE")
+    , "default_database" : os.getenv("SNOWFLAKE_DEFAULT_DATABASE")
+    , "default_schema" : os.getenv("SNOWFLAKE_DEFAULT_SCHEMA")
+    , "private_key_plain_text" : private_key
+  }
+
+  ### Populate snowflake_connection_parameters from imported_connection_parameters
+  snowflake_connection_parameters = retrieve_snowflake_connection_parameters(imported_connection_parameters, private_key_output_format = 'snowpipe')
+
+  snowpipe_ingest_manager = build_snowpipe_ingest_manager_from_connection_parameters(snowflake_connection_parameters, target_pipe_name)
+
+  return snowpipe_ingest_manager
+
 ## Define function to trigger a snowpipe ingestion
 def trigger_snowpipe_ingestion(
       snowpipe_ingest_manager: SimpleIngestManager
