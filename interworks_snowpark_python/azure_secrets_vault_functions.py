@@ -38,17 +38,6 @@ def protect_key_pair_name(
 
   return protected_key_pair_name
 
-# Define function to retrieve key pair
-# from the secrets vault
-def retrieve_private_key_from_azure_secrets(
-      secret_client: SecretClient
-    , private_key_name: str
-  ) :
-    
-  private_key = secret_client.get_secret(private_key_name).value
-  
-  return private_key
-
 # Define function to retrieve private key
 # from the secrets vault
 def retrieve_private_key_from_azure_secrets(
@@ -63,9 +52,6 @@ def retrieve_private_key_from_azure_secrets(
   protected_key_pair_name = protect_key_pair_name(key_pair_name)
 
   ### Retrieve the key pair from the vault
-  private_key = retrieve_private_key_from_azure_secrets(
-      secret_client = secret_client
-    , private_key_name = protected_key_pair_name
-  )
+  private_key = secret_client.get_secret(protected_key_pair_name).value
   
   return private_key
