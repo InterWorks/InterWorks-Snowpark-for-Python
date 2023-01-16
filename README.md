@@ -17,14 +17,17 @@ This package has been created to simplify the creation of Snowpark for Python se
     - [Connection parameters in a local JSON file](#connection-parameters-in-a-local-json-file)
     - [Connection parameters via Streamlit secrets](#connection-parameters-via-streamlit-secrets)
     - [Connection parameters via environment variables](#connection-parameters-via-environment-variables)
+    - [Connection parameters via Azure app settings and key vault](#connection-parameters-via-azure-app-settings-and-key-vault)
   - [Testing your Snowpark connection](#testing-your-snowpark-connection)
     - [Testing your Snowpark connection with a parameters JSON file](#testing-your-snowpark-connection-with-a-parameters-json-file)
     - [Testing your Snowpark connection with streamlit secrets](#testing-your-snowpark-connection-with-streamlit-secrets)
     - [Testing your Snowpark connection with environment variables](#testing-your-snowpark-connection-with-environment-variables)
+    - [Testing your Snowpark connection with Azure app settings and key vault](#testing-your-snowpark-connection-with-azure-app-settings-and-key-vault)
   - [Testing your Snowpipe connection](#testing-your-snowpipe-connection)
     - [Testing your Snowpipe connection with a parameters JSON file](#testing-your-snowpipe-connection-with-a-parameters-json-file)
     - [Testing your Snowpipe connection with streamlit secrets](#testing-your-snowpipe-connection-with-streamlit-secrets)
     - [Testing your Snowpipe connection with environment variables](#testing-your-snowpipe-connection-with-environment-variables)
+    - [Testing your Snowpipe connection with Azure app settings and key vault](#testing-your-snowpipe-connection-with-azure-app-settings-and-key-vault)
 
 ## Articles
 
@@ -187,6 +190,20 @@ SNOWFLAKE_PRIVATE_KEY_PASSPHRASE : "<passphrase>" ## Enter "None" if not require
 SNOWFLAKE_PASSWORD : "<password>" ## Enter "None" if not required, ignored if private key path or private key plain text is provided
 ```
 
+### Connection parameters via Azure app settings and key vault
+
+If using app settings in Azure (i.e. environment variables) and a private key stored as a secret in Azure Key Vault, the app settings should match the format below.
+
+```shell
+AZURE_KEY_VAULT_NAME : "<name-of-key-vault>"
+SNOWFLAKE_ACCOUNT : "<account>[.<region>][.<cloud provider>]"
+SNOWFLAKE_USER : "<username>"
+SNOWFLAKE_DEFAULT_ROLE : "<default role>" ## Enter "None" if not required
+SNOWFLAKE_DEFAULT_WAREHOUSE : "<default warehouse>" ## Enter "None" if not required
+SNOWFLAKE_DEFAULT_DATABASE : "<default database>" ## Enter "None" if not required
+SNOWFLAKE_DEFAULT_SCHEMA : "<default schema>" ## Enter "None" if not required
+```
+
 ## Testing your Snowpark connection
 
 This section contains steps to simplify testing of your Snowpark connection. Naturally, these tests will only be successful if you have configured the corresponding parameters as detailed above.
@@ -221,6 +238,16 @@ cd path/to/this/directory
 python run "connection_tests/test_snowpark_connection_via_environment_variables.py"
 ```
 
+### Testing your Snowpark connection with Azure app settings and key vault
+
+Execute the following steps in an Anaconda terminal, or directly run the `connection_tests/test_snowpark_connection_via_azure_app_settings_and_key_vault.py` file step by step through VSCode or similar.
+
+```powershell
+conda activate py38_snowpark
+cd path/to/this/directory
+python run "connection_tests/test_snowpark_connection_via_azure_app_settings_and_key_vault.py"
+```
+
 ## Testing your Snowpipe connection
 
 This section contains steps to simplify testing of your Snowpipe connection. Naturally, these tests will only be successful if you have configured the corresponding parameters as detailed above.
@@ -253,4 +280,14 @@ Execute the following steps in an Anaconda terminal, or directly run the `connec
 conda activate py38_snowpark
 cd path/to/this/directory
 python run "connection_tests/test_snowpipe_connection_via_environment_variables.py"
+```
+
+### Testing your Snowpipe connection with Azure app settings and key vault
+
+Execute the following steps in an Anaconda terminal, or directly run the `connection_tests/test_snowpipe_connection_via_azure_app_settings_and_key_vault.py` file step by step through VSCode or similar.
+
+```powershell
+conda activate py38_snowpark
+cd path/to/this/directory
+python run "connection_tests/test_snowpipe_connection_via_azure_app_settings_and_key_vault.py"
 ```
