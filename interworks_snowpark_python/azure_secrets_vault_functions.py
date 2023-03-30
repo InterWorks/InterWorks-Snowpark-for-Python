@@ -1,7 +1,7 @@
 
 # Import the required modules for Azure
 from azure.keyvault.secrets import SecretClient
-from azure.identity import ManagedIdentityCredential
+from azure.identity import DefaultAzureCredential
 
 # Import other required packages
 import os
@@ -17,11 +17,11 @@ def retrieve_key_vault_uri() :
 # to retrieve secret client
 def retrieve_secret_client() :
   
-  managed_identity_credential = ManagedIdentityCredential()
+  default_azure_credential = DefaultAzureCredential()
 
   key_vault_uri = retrieve_key_vault_uri()
 
-  secret_client = SecretClient(vault_url=key_vault_uri, credential=managed_identity_credential)
+  secret_client = SecretClient(vault_url=key_vault_uri, credential=default_azure_credential)
 
   return secret_client
 
