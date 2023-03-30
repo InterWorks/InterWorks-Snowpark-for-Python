@@ -108,15 +108,18 @@ def build_snowpark_session_via_parameters_object(
 def build_snowpark_session_using_stored_private_key_in_azure_secrets_vault() :
   
   ### Import required modules
-  from .azure_secrets_vault_functions import retrieve_private_key_from_azure_secrets
+  from .azure_secrets_vault_functions import retrieve_secret_from_azure_secrets
   from .leverage_snowflake_connection_parameters_dictionary import retrieve_snowflake_connection_parameters
   import os
 
   ### Retrieve snowflake user from environment variables
   snowflake_user = os.getenv("SNOWFLAKE_USER")
+  
+  ### Create name of desired secret
+  private_key_secret_name = f"f{snowflake_user}__private_key"
 
   ### Retrieve private key for user from Azure Secrets Vault
-  private_key = retrieve_private_key_from_azure_secrets(snowflake_user)
+  private_key = retrieve_secret_from_azure_secrets(private_key_secret_name)
 
   ### Define empty variable that will be populated with JSON
   snowflake_connection_parameters = {}

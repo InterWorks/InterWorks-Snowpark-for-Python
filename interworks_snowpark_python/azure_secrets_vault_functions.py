@@ -26,22 +26,22 @@ def retrieve_secret_client() :
   return secret_client
 
 # Define function to convert the given
-# key pair name to one that is compliant
+# secret name to one that is compliant
 # with Azure Secrets naming conventions
-def protect_key_pair_name(
-      key_pair_name: str
+def protect_secret_name(
+      secret_name: str
   ) :
 
   ### Replace underscores with hyphens, as underscores
   ### are expected in Snowflake service account usernames
-  protected_key_pair_name = key_pair_name.replace("_", "-")
+  protected_secret_name = secret_name.replace("_", "-")
 
-  return protected_key_pair_name
+  return protected_secret_name
 
-# Define function to retrieve private key
+# Define function to retrieve secret
 # from the secrets vault
-def retrieve_private_key_from_azure_secrets(
-      key_pair_name: str
+def retrieve_secret_from_azure_secrets(
+      secret_name: str
   ) :
     
   ### Leverage managed identity to retrieve secrets client
@@ -49,9 +49,9 @@ def retrieve_private_key_from_azure_secrets(
   
   ### Convert key pair name to one that is compliant
   ### with Azure Secrets naming conventions
-  protected_key_pair_name = protect_key_pair_name(key_pair_name)
+  protected_secret_name = protect_secret_name(secret_name)
 
   ### Retrieve the key pair from the vault
-  private_key = secret_client.get_secret(protected_key_pair_name).value
+  secret_value = secret_client.get_secret(protected_secret_name).value
   
-  return private_key
+  return secret_value
