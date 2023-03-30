@@ -118,7 +118,7 @@ def build_snowpipe_ingest_manager_using_stored_private_key_in_azure_secrets_vaul
   snowflake_user = os.getenv("SNOWFLAKE_USER")
   
   ### Create name of desired secret
-  private_key_secret_name = f"f{snowflake_user}__private_key"
+  private_key_secret_name = f"{snowflake_user}__private_key"
 
   ### Retrieve private key for user from Azure Secrets Vault
   private_key = retrieve_secret_from_azure_secrets(private_key_secret_name)
