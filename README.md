@@ -8,6 +8,7 @@ This package has been created to simplify the creation of Snowpark for Python se
 - [InterWorks Snowpark for Python](#interworks-snowpark-for-python)
   - [Contents](#contents)
   - [Articles](#articles)
+  - [License](#license)
   - [Third Party Packages from Anaconda](#third-party-packages-from-anaconda)
   - [Local Installation](#local-installation)
     - [Quick Conda Environment Creation](#quick-conda-environment-creation)
@@ -32,6 +33,10 @@ This package has been created to simplify the creation of Snowpark for Python se
 ## Articles
 
 Much of the content in this README is also discussed in the [Definitive Guide to Snowflake Sessions with Snowpark for Python](https://interworks.com/blog/2022/09/05/a-definitive-guide-to-snowflake-sessions-with-snowpark-for-python), which is part of the [Snowflake with Python series on the InterWorks blog](https://interworks.com/blog/series/snowflake-with-python).
+
+## License
+
+This project is licensed under the terms of the MIT license. InterWorks, Inc. makes this code available with no support and makes no guarantees on posted issues, pull requests, or feedback posted here. Click [here](https://www.interworks.com/contact) to can contact InterWorks, Inc. directly.
 
 ## Third Party Packages from Anaconda
 
