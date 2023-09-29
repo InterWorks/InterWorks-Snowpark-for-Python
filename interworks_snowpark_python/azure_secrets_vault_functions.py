@@ -15,11 +15,12 @@ def retrieve_key_vault_uri() :
 
 # Define function to leverage managed identity
 # to retrieve secret client
-def retrieve_secret_client() :
+def retrieve_secret_client(key_vault_uri:str = None) :
   
   default_azure_credential = DefaultAzureCredential()
 
-  key_vault_uri = retrieve_key_vault_uri()
+  if key_vault_uri is None or len(key_vault_uri) == 0:
+    key_vault_uri = retrieve_key_vault_uri()
 
   secret_client = SecretClient(vault_url=key_vault_uri, credential=default_azure_credential)
 
@@ -42,10 +43,11 @@ def protect_secret_name(
 # from the secrets vault
 def retrieve_secret_from_azure_secrets(
       secret_name: str
+    , key_vault_uri: str = None
   ) :
     
   ### Leverage managed identity to retrieve secrets client
-  secret_client = retrieve_secret_client()
+  secret_client = retrieve_secret_client(key_vault_uri=key_vault_uri)
   
   ### Convert key pair name to one that is compliant
   ### with Azure Secrets naming conventions

@@ -106,7 +106,8 @@ def build_snowpark_session_via_parameters_object(
 ## an Azure secrets vault.
 ## Only works if corresponding Azure packages are installed
 def build_snowpark_session_using_stored_private_key_in_azure_secrets_vault(
-      snowflake_user: str = None
+      key_vault_uri: str = None
+    , snowflake_user: str = None
     , snowflake_account: str = None
     , snowflake_default_role: str = None
     , snowflake_default_warehouse: str = None
@@ -137,7 +138,7 @@ def build_snowpark_session_using_stored_private_key_in_azure_secrets_vault(
   private_key_secret_name = f"{snowflake_user}__private_key"
 
   ### Retrieve private key for user from Azure Secrets Vault
-  private_key = retrieve_secret_from_azure_secrets(private_key_secret_name)
+  private_key = retrieve_secret_from_azure_secrets(secret_name=private_key_secret_name, key_vault_uri=key_vault_uri)
 
   ### Define imported connection parameters using environment variables
   ### whilst targeting specific account
