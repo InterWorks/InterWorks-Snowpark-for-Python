@@ -105,15 +105,33 @@ def build_snowpark_session_via_parameters_object(
 ## with the private key stored in 
 ## an Azure secrets vault.
 ## Only works if corresponding Azure packages are installed
-def build_snowpark_session_using_stored_private_key_in_azure_secrets_vault() :
+def build_snowpark_session_using_stored_private_key_in_azure_secrets_vault(
+      snowflake_user: str = None
+    , snowflake_account: str = None
+    , snowflake_default_role: str = None
+    , snowflake_default_warehouse: str = None
+    , snowflake_default_database: str = None
+    , snowflake_default_schema: str = None
+  ) :
   
   ### Import required modules
   from .azure_secrets_vault_functions import retrieve_secret_from_azure_secrets
   from .leverage_snowflake_connection_parameters_dictionary import retrieve_snowflake_connection_parameters
   import os
 
-  ### Retrieve snowflake user from environment variables
-  snowflake_user = os.getenv("SNOWFLAKE_USER")
+  ### Retrieve any missing inputs from environment variables
+  if snowflake_user is None or len(snowflake_user) == 0:
+    snowflake_user = os.getenv("SNOWFLAKE_USER")
+  if snowflake_account is None or len(snowflake_account) == 0:
+    snowflake_account = os.getenv("SNOWFLAKE_ACCOUNT")
+  if snowflake_default_role is None or len(snowflake_default_role) == 0:
+    snowflake_default_role = os.getenv("SNOWFLAKE_DEFAULT_ROLE")
+  if snowflake_default_warehouse is None or len(snowflake_default_warehouse) == 0:
+    snowflake_default_warehouse = os.getenv("SNOWFLAKE_DEFAULT_WAREHOUSE")
+  if snowflake_default_database is None or len(snowflake_default_database) == 0:
+    snowflake_default_database = os.getenv("SNOWFLAKE_DEFAULT_DATABASE")
+  if snowflake_default_schema is None or len(snowflake_default_schema) == 0:
+    snowflake_default_schema = os.getenv("SNOWFLAKE_DEFAULT_SCHEMA")
   
   ### Create name of desired secret
   private_key_secret_name = f"{snowflake_user}__private_key"
@@ -121,18 +139,15 @@ def build_snowpark_session_using_stored_private_key_in_azure_secrets_vault() :
   ### Retrieve private key for user from Azure Secrets Vault
   private_key = retrieve_secret_from_azure_secrets(private_key_secret_name)
 
-  ### Define empty variable that will be populated with JSON
-  snowflake_connection_parameters = {}
-
   ### Define imported connection parameters using environment variables
   ### whilst targeting specific account
   imported_connection_parameters = {
-      "account" : os.getenv("SNOWFLAKE_ACCOUNT")
+      "account" : snowflake_account
     , "user" : snowflake_user
-    , "default_role" : os.getenv("SNOWFLAKE_DEFAULT_ROLE")
-    , "default_warehouse" : os.getenv("SNOWFLAKE_DEFAULT_WAREHOUSE")
-    , "default_database" : os.getenv("SNOWFLAKE_DEFAULT_DATABASE")
-    , "default_schema" : os.getenv("SNOWFLAKE_DEFAULT_SCHEMA")
+    , "default_role" : snowflake_default_role
+    , "default_warehouse" : snowflake_default_warehouse
+    , "default_database" : snowflake_default_database
+    , "default_schema" : snowflake_default_schema
     , "private_key_plain_text" : private_key
   }
 

@@ -8,7 +8,7 @@ from snowflake.ingest import StagedFile
 ## Define function to build a snowpipe ingest manager
 def build_snowpipe_ingest_manager_from_connection_parameters(
       snowflake_connection_parameters: dict
-    , target_pipe_name : str = None
+    , target_pipe_name: str = None
   ):
 
   snowpipe_ingest_manager = SimpleIngestManager(
@@ -26,7 +26,7 @@ def build_snowpipe_ingest_manager_from_connection_parameters(
 ## containing Snowflake connection parameters
 def build_snowpipe_ingest_manager_via_parameters_json(
       snowflake_connection_parameters_json_filepath: str = 'snowflake_connection_parameters.json'
-    , target_pipe_name : str = None
+    , target_pipe_name: str = None
   ):
 
   from .leverage_snowflake_connection_parameters_dictionary import import_snowflake_connection_parameters_from_local_json
@@ -41,7 +41,7 @@ def build_snowpipe_ingest_manager_via_parameters_json(
 ## leveraging a Streamlit secrets file
 ## containing Snowflake connection parameters
 def build_snowpipe_ingest_manager_via_streamlit_secrets(
-    target_pipe_name : str = None
+    target_pipe_name: str = None
   ):
 
   from .leverage_snowflake_connection_parameters_dictionary import import_snowflake_connection_parameters_from_streamlit_secrets
@@ -56,7 +56,7 @@ def build_snowpipe_ingest_manager_via_streamlit_secrets(
 ## leveraging environment variables
 ## containing Snowflake connection parameters
 def build_snowpipe_ingest_manager_via_environment_variables(
-    target_pipe_name : str = None
+    target_pipe_name: str = None
   ):
 
   from .leverage_snowflake_connection_parameters_dictionary import import_snowflake_connection_parameters_from_environment_variables
@@ -72,7 +72,7 @@ def build_snowpipe_ingest_manager_via_environment_variables(
 ## containing Snowflake connection parameters
 def build_snowpipe_ingest_manager_via_parameters_object(
       imported_connection_parameters: dict
-    , target_pipe_name : str = None
+    , target_pipe_name: str = None
   ):
 
   '''
@@ -106,7 +106,13 @@ def build_snowpipe_ingest_manager_via_parameters_object(
 ## an Azure secrets vault.
 ## Only works if corresponding Azure packages are installed
 def build_snowpipe_ingest_manager_using_stored_private_key_in_azure_secrets_vault(
-    target_pipe_name : str = None
+      target_pipe_name: str = None
+    , snowflake_user: str = None
+    , snowflake_account: str = None
+    , snowflake_default_role: str = None
+    , snowflake_default_warehouse: str = None
+    , snowflake_default_database: str = None
+    , snowflake_default_schema: str = None
   ):
 
   ### Import required modules
@@ -114,8 +120,19 @@ def build_snowpipe_ingest_manager_using_stored_private_key_in_azure_secrets_vaul
   from .leverage_snowflake_connection_parameters_dictionary import retrieve_snowflake_connection_parameters
   import os
 
-  ### Retrieve snowflake user from environment variables
-  snowflake_user = os.getenv("SNOWFLAKE_USER")
+  ### Retrieve any missing inputs from environment variables
+  if snowflake_user is None or len(snowflake_user) == 0:
+    snowflake_user = os.getenv("SNOWFLAKE_USER")
+  if snowflake_account is None or len(snowflake_account) == 0:
+    snowflake_account = os.getenv("SNOWFLAKE_ACCOUNT")
+  if snowflake_default_role is None or len(snowflake_default_role) == 0:
+    snowflake_default_role = os.getenv("SNOWFLAKE_DEFAULT_ROLE")
+  if snowflake_default_warehouse is None or len(snowflake_default_warehouse) == 0:
+    snowflake_default_warehouse = os.getenv("SNOWFLAKE_DEFAULT_WAREHOUSE")
+  if snowflake_default_database is None or len(snowflake_default_database) == 0:
+    snowflake_default_database = os.getenv("SNOWFLAKE_DEFAULT_DATABASE")
+  if snowflake_default_schema is None or len(snowflake_default_schema) == 0:
+    snowflake_default_schema = os.getenv("SNOWFLAKE_DEFAULT_SCHEMA")
   
   ### Create name of desired secret
   private_key_secret_name = f"{snowflake_user}__private_key"
@@ -123,18 +140,15 @@ def build_snowpipe_ingest_manager_using_stored_private_key_in_azure_secrets_vaul
   ### Retrieve private key for user from Azure Secrets Vault
   private_key = retrieve_secret_from_azure_secrets(private_key_secret_name)
   
-  ### Define empty variable that will be populated with JSON
-  snowflake_connection_parameters = {}
-
   ### Define imported connection parameters using environment variables
   ### whilst targeting specific account
   imported_connection_parameters = {
-      "account" : os.getenv("SNOWFLAKE_ACCOUNT")
+      "account" : snowflake_account
     , "user" : snowflake_user
-    , "default_role" : os.getenv("SNOWFLAKE_DEFAULT_ROLE")
-    , "default_warehouse" : os.getenv("SNOWFLAKE_DEFAULT_WAREHOUSE")
-    , "default_database" : os.getenv("SNOWFLAKE_DEFAULT_DATABASE")
-    , "default_schema" : os.getenv("SNOWFLAKE_DEFAULT_SCHEMA")
+    , "default_role" : snowflake_default_role
+    , "default_warehouse" : snowflake_default_warehouse
+    , "default_database" : snowflake_default_database
+    , "default_schema" : snowflake_default_schema
     , "private_key_plain_text" : private_key
   }
 
