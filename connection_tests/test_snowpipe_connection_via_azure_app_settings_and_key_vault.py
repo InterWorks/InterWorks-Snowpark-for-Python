@@ -8,13 +8,13 @@ from ..interworks_snowpark_python.snowpipe_ingest_manager_builder import build_s
 ## Optional section to set specific environment variables temporarily
 import os
 
-os.environ[AZURE_KEY_VAULT_NAME] = "<name-of-key-vault>"
-os.environ[SNOWFLAKE_ACCOUNT] = "<account>[.<region>][.<cloud provider>]"
-os.environ[SNOWFLAKE_USER] = "<username>"
-os.environ[SNOWFLAKE_DEFAULT_ROLE] = "<default role>" ## Enter "None" if not required
-os.environ[SNOWFLAKE_DEFAULT_WAREHOUSE] = "<default warehouse>" ## Enter "None" if not required
-os.environ[SNOWFLAKE_DEFAULT_DATABASE] = "<default database>" ## Enter "None" if not required
-os.environ[SNOWFLAKE_DEFAULT_SCHEMA] = "<default schema>" ## Enter "None" if not required
+os.environ["AZURE_KEY_VAULT_NAME"] = "<name-of-key-vault>"
+os.environ["SNOWFLAKE_ACCOUNT"] = "<account>[.<region>][.<cloud provider>]"
+os.environ["SNOWFLAKE_USER"] = "<username>"
+os.environ["SNOWFLAKE_DEFAULT_ROLE"] = "<default role>" ## Enter "None" if not required
+os.environ["SNOWFLAKE_DEFAULT_WAREHOUSE"] = "<default warehouse>" ## Enter "None" if not required
+os.environ["SNOWFLAKE_DEFAULT_DATABASE"] = "<default database>" ## Enter "None" if not required
+os.environ["SNOWFLAKE_DEFAULT_SCHEMA"] = "<default schema>" ## Enter "None" if not required
 '''
 
 ## If desired, populate a target pipe name to test the connection to
